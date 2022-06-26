@@ -1,27 +1,21 @@
-//binary heap is likke binary tree but
-//binary max heap has largest number as root and all children are less than parents
-//binary max heap has smallest number as root and all children are more than their parents
+class Node {
+  constructor(val, priority) {
+    this.val = val;
+    this.priority = priority;
+  }
+}
 
-//implemented through array
-//children of parent n
-//left child is 2n+1
-//right child is 2n+2
-
-//parent of child n
-//(n-1)/2 floored
-
-//
-
-class MaxBinaryHeap {
+class PriorityQueue {
   constructor() {
     this.values = [];
   }
 
-  insert(val) {
+  enqueue(val, priority) {
     //push
     //compare new node to parent, swap if bigger
     // loop until not bigger
-    this.values.push(val);
+    let newNode = new Node(val, priority);
+    this.values.push(newNode);
     this.bubbleUp();
 
     //   let index = this.values.length-1;
@@ -33,25 +27,27 @@ class MaxBinaryHeap {
   }
   bubbleUp() {
     let index = this.values.length - 1;
-    const element = this.values[index];
+    const node = this.values[index];
+    let nodePri = node.priority;
     while (index > 0) {
       let parentIdx = Math.floor((idx - 1) / 2);
       let parent = this.values[parentIdx];
-      if (element <= parent) break;
-      this.values[parentIdx] = element;
+      let parentPri = parent.priority;
+      if (nodePri <= parentPri) break;
+      this.values[parentIdx] = node;
       this.values[index] = parent;
       idx = parentIdx;
     }
   }
-  extractMax() {
+  dequeue() {
     //edge case come back to this
-    const lastElement = this.values.pop();
-    const top = this.values[0];
+    const lastNode = this.values.pop();
+    const topNode = this.values[0];
     if (this.values.length > 0) {
-      this.values[0] = lastElement;
+      this.values[0] = lastNode;
       this.sinkDown();
     }
-    return top;
+    return topNode;
   }
   sinkDown() {
     let idx = 0;
@@ -64,15 +60,15 @@ class MaxBinaryHeap {
       let swap = null;
       if (leftChildIdx < length) {
         leftChild = this.values[leftChildIdx];
-        if (leftChild > element) {
-          swap = leftChildIdx;
+        if (leftChild.priority > element.priority) {
+          swap = leftChild;
         }
       }
       if (rightChildIdx < length) {
         rightChild = this.value[rightChildIdx];
         if (
-          (rightChild > element && swap === null) ||
-          (swap !== null) & (rightChild > leftChild)
+          (rightChild.priority > element.priority && swap === null) ||
+          (swap !== null) & (rightChild.priority > leftChild.priority)
         ) {
           swap = rightChildIdx;
         }
